@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang='en'>
+<head>
+    <meta charset='UTF-8'>
+    <title>Flex Ltd. Supplier Network With Disruptions</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v1.5.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+        body { margin: 0; padding: 0; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; };
+    </style>
+</head>
+<body>
+
+<!--*****************-->
+<!--MAPBOX MENU STYLE-->
+<!--*****************-->
+<style>
+        #menu {
+            background: #fff;
+            position: absolute;
+            z-index: 1;
+            top: 10px;
+            right: 10px;
+            border-radius: 3px;
+            width: 120px;
+            border: 1px solid rgba(0,0,0,0.4);
+            font-family: 'Open Sans', sans-serif;
+        }
+
+        #menu a {
+            font-size: 13px;
+            color: #404040;
+            display: block;
+            margin: 0;
+            padding: 0;
+            padding: 10px;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(0,0,0,0.25);
+            text-align: center;
+        }
+
+        #menu a:last-child {
+            border: none;
+        }
+
+        #menu a:hover {
+            background-color: #f8f8f8;
+            color: #404040;
+        }
+
+        #menu a.active {
+            background-color: #3887be;
+            color: #ffffff;
+        }
+
+        #menu a.active:hover {
+            background: #3074a4;
+        }
+
+        #info {
+          position: absolute;
+          font-family: sans-serif;
+          margin-top: 5px;
+          margin-left: 5px;
+          padding: 5px;
+          width: 30%;
+          border: 2px solid black;
+          font-size: 14px;
+          color: #222;
+          background-color: #fff;
+          border-radius: 3px;
+        }
+
+        #menu a:hover {
+            background-color: #f8f8f8;
+            color: #404040;
+        }
+
+        #menu a.active {
+            background-color: #139069;
+            color: #ffffff;
+        }
+
+        #menu a.active:hover {
+            background: #00FFC7;
+        }
+
+        .mapboxgl-ctrl-logo{
+            display: none !important;
+        }
+
+        #credit{
+          position: absolute;
+          opacity: 0.8;
+          left:0;
+          bottom: 0;
+          color: white;
+          text-align: left;
+          padding-bottom: 10px;
+          padding-left: 10px;
+          font-size: 10px;
+          font-family: 'Arial';
+        }
+
+        #clear_logo{
+          position: absolute;
+          bottom: 0;
+          right: 0;
+          padding-bottom: 10px;
+          padding-right: 15px;
+          opacity: 0.8;'
+
+        }
+
+        #timewords{
+          position: absolute;
+          opacity: 0.8;
+          left: 50%;
+          bottom: 0;
+          color: white;
+          text-align: centre;
+          padding-bottom: 10px;
+          font-size: 12px;
+          font-family: 'Arial';
+        }
+</style>
+
+<!--**********-->
+<!--MAPBOX MAP-->
+<!--**********-->
+<nav id='menu'></nav>
+<div id='map'></div>
+<!-- <div id='info'></div> -->
+<div id='timewords' width= '250px'> </div>
+<div id='credit'> Confidential <br> Clear Artifical Intelligence Limited </div>
+
+<!--***************-->
+<!--START OF SCRIPT-->
+<!--***************-->
+<script>
+mapboxgl.accessToken = '__MAPBOX_ACCESS_TOKEN__';
+var map = new mapboxgl.Map({
+    container: 'map',
+    style: 'mapbox://styles/clearalex/cjsaawc4300jd1fquiakptda8',
+    // zoom: 15,
+    // center: [-71.97722138410576, -13.517379300798098]
+    center: [0, 0],
+    attributionControl: false
+});
+
+// map on load start
+map.on('load', function() {
+
+// *******
+// SOURCES
+// *******
+
+__SOURCEMARKERS__
+
+// ******
+// LAYERS
+// ******
+
+__LAYERMARKERS__
+
+});
+// map on load end
+
+// *****************
+// TOGGLE MENU LAYER
+// *****************
+
+__FILLINTOGGLESCRIPT__
+
+
+</script>
+
+</body>
