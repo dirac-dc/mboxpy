@@ -41,11 +41,9 @@ class MapBoxWrapper:
         self.layers = []
         self.all_coords = []
 
-
     def _find_center(self):
         coords = np.array(self.all_coords).reshape(len(self.all_coords)//2, 2)
         return coords.mean(axis=0).tolist()
-
 
     def add_feature(self, feature: dict) -> None:
 
@@ -54,7 +52,6 @@ class MapBoxWrapper:
 
         coord = np.ravel(feature['array']).tolist() if (feature['geojson_type'] != 'Point') else feature['array']
         self.all_coords += coord
-
         self.features += [feature]
         geojson_feat = self._create_geojson_feature(**feature)
         self.geojson_features += [geojson_feat]
@@ -68,6 +65,7 @@ class MapBoxWrapper:
         if filters:
             print(('Warning: Properties in filters must be universal'
                    'i.e. the property must be available in every feature.'))
+
             if not isinstance(filters[0], list): # solves broadcasting problem with 1D array
                 filters = [filters]
 
@@ -195,7 +193,6 @@ class MapBoxWrapper:
         f = open(template_path, "r")
         template = "".join(f.readlines())
         f.close()
-
         f = open(access_token_path, "r")
         mb_token = f.readline()
         f.close()
