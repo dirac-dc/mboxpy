@@ -39,11 +39,21 @@ class MapBoxWrapper:
         self.geojson_features = []
         self.geojson_filter_types = []
         self.layers = []
+        self.all_coords = []
+
+
+    def _find_center(self):
+        coords = np.array(self.all_coords).reshape(len(self.all_coords)//2, 2)
+        return coords.mean(axis=0).tolist()
+
 
     def add_feature(self, feature: dict) -> None:
 
         if not (list(feature) == self.FEATURE_KEYS):
             raise AttributeError(f"Features dict must have keys {self.FEATURE_KEYS}.")
+
+        coord = np.ravel(feature['array']).tolist() if (feature['geojson_type'] != 'Point') else feature['array']
+        self.all_coords += coord
 
         self.features += [feature]
         geojson_feat = self._create_geojson_feature(**feature)
@@ -51,12 +61,13 @@ class MapBoxWrapper:
         self.geojson_filter_types += [self.FILTER_DICT[feature['geojson_type']]]
 
     def list_features(self):
-        return self.geojson_features
+        return self.features
 
-    def output_html(self, output_path: Path, layer_property: str="", filters: List=[]) -> None:
+    def output_html(self, output_path: Path, layer_property: str="", filters: list=()) -> None:
 
         if filters:
-            print('Warning: Properties in filters must be universal')
+            print(('Warning: Properties in filters must be universal'
+                   'i.e. the property must be available in every feature.'))
             if not isinstance(filters[0], list): # solves broadcasting problem with 1D array
                 filters = [filters]
 
@@ -66,7 +77,7 @@ class MapBoxWrapper:
 
         self.layerids = []
         if layer_property:
-            self.prop_dict = self.find_property_types(layer_property)
+            self.prop_dict = self._find_property_types(layer_property)
 
             for value_, types_ in self.prop_dict.items():
                 for type_ in types_:
@@ -101,7 +112,7 @@ class MapBoxWrapper:
         self._write_filled_template(output_path, self.template)
         print(f"Output written at {output_path}.")
 
-    def find_property_types(self, property_):
+    def _find_property_types(self, property_):
         property_dict = {}
         for feat in self.features:
             if feat['properties'].get(property_, False):
@@ -111,9 +122,6 @@ class MapBoxWrapper:
                 else:
                     property_dict[prop] += [self.FILTER_DICT[feat['geojson_type']]]
         return {key:np.unique(item) for key, item in property_dict.items()}
-
-
-
 
     def _create_geojson_feature(self,
                                 array: Union[np.array, list],
