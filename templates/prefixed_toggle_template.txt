@@ -1,0 +1,49 @@
+find_prefixed_layers = function(prefix, toggles) {
+    var res = [];
+    for (var i=0; i < toggles.length; i++) {
+        var id = toggles[i];
+        if (id.startsWith(prefix)) {
+            res[i] = id;
+        }
+    }
+    return res
+}
+
+
+var toggleableLayerIds = __FILLINLAYERIDS__
+var layerPrefixes = __FILLINLAYERPROPERTY__ // the layers that will be created
+for (var i=0; i < layerPrefixes.length ; i++) {
+
+    var id = layerPrefixes[i];
+    var link = document.createElement('a');
+    link.href = '#';
+    link.className = 'active';
+    link.textContent = id;
+
+    link.onclick = function(e) {
+        var clickedLayer = this.textContent;
+        e.preventDefault();
+        e.stopPropagation();
+
+        var layerIds = find_prefixed_layers(clickedLayer, toggleableLayerIds);
+        window.console.log(layerIds)
+        for (var i=0; i < layerIds.length; i++) {
+            var prefixedLayer = layerIds[i];
+            console.log(prefixedLayer)
+            var visibility = map.getLayoutProperty(prefixedLayer, 'visibility');
+            if (visibility === 'visible') {
+                map.setLayoutProperty(prefixedLayer, 'visibility', 'none');
+                this.className = '';
+            } else {
+                this.className = 'active';
+                map.setLayoutProperty(prefixedLayer, 'visibility', 'visible');
+            }
+        }
+
+
+    };
+
+    var layers = document.getElementById('menu')
+    layers.appendChild(link)
+
+}
