@@ -264,14 +264,12 @@ class MapBoxWrapper:
 
     def _find_center_and_bounds(self):
         '''Finds the center for the map and the bounding rectangle [SW coord, NEcoord] of the coordinates.
-        It exploits folium to do this but note that folium takes in coordinates in [latitiude, longitude] order
-        so switches have to be made.
         '''
         coords = np.array(self.all_coords).reshape(len(self.all_coords) // 2, 2)
         center = coords.mean(axis=0).tolist()
 
-        sw = coords.min(axis=0).tolist()
-        ne = coords.max(axis=0).tolist()
+        sw = (coords.min(axis=0) - MARGIN).tolist()
+        ne = (coords.max(axis=0) + MARGIN).tolist()
 
         return center, [sw, ne]
 
