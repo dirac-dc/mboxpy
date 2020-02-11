@@ -2,10 +2,10 @@ from pathlib import Path
 import re
 from typing import List, Union
 import logging
+from itertools import chain
 
 import numpy as np
 from colour import Color
-import folium
 
 from mapboxwrapper.defaults import PROJECT_ROOT
 
@@ -63,7 +63,13 @@ class MapBoxWrapper:
         if not (list(feature) == self.FEATURE_KEYS):
             raise AttributeError(f"Features dict must have keys {self.FEATURE_KEYS}.")
 
-        coord = np.ravel(feature['array']).tolist() if (feature['geojson_type'] != 'Point') else feature['array']
+        if (feature['geojson_type'] == 'Point'):
+            coord = feature['array']
+        elif (feature['geojson_type'] == 'MultiLineString'):
+            coord = list(chain(*chain(*feature['array'])))
+        else:
+            coord = list(chain(*feature['array']))
+
         self.all_coords += coord
         self.features += [feature]
         geojson_feat = self._create_geojson_feature(**feature)
@@ -99,7 +105,7 @@ class MapBoxWrapper:
                                                source_name=self.SOURCE_NAME,
                                                filter=["all",
                                                        ['==', layer_property, value_],
-                                                       self.LAYER_FILTERS[type_]] + filters,
+                                                       self.LAYER_FILTERS[type_]] + list(filters),
                                                **self.LAYER_STYLES[type_])
                     self.layers += [layer]
                     self.template = self._add_layer(self.template, layer)
@@ -263,11 +269,11 @@ class MapBoxWrapper:
         '''
         coords = np.array(self.all_coords).reshape(len(self.all_coords) // 2, 2)
         center = coords.mean(axis=0).tolist()
-        m = folium.Map(location=list(reversed(center)))
-        for coord in coords[:, ::-1]:
-            folium.Marker(location=coord).add_to(m)
-        rb = m.get_bounds()
-        return center, [[rb[0][1] - MARGIN, rb[0][0] - MARGIN], [rb[1][1] + MARGIN, rb[1][0] + MARGIN]]
+
+        sw = coords.min(axis=0).tolist()
+        ne = coords.max(axis=0).tolist()
+
+        return center, [sw, ne]
 
     def _add_center_and_bounds(self, template: str):
         '''Adds center and bounds appropriately to template.'''
