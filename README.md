@@ -1,7 +1,7 @@
 # MapBoxWrapper
 A python wrapper for plotting latitude/longitude coordinates in Mapbox to produce an initial html.
 
-The standard map produced is shown below: 
+An example of the standard type maps produced is shown below: 
 
 ![mapbox example](images/mapbox_example.png)
 
