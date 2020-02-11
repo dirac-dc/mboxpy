@@ -1,0 +1,24 @@
+[flake8]
+max-line-length = 120
+exclude =  # Folders to exclude
+    venv,
+    .git,
+    tests/debugging.py,
+    deprecated,
+    .tox
+    *.egg-info/
+    *.pkl
+ignore =  # Error codes to ignore (project level)
+    F403,  # 'from module import *' used; unable to detect undefined names
+    F405,  # name may be undefined, or defined from star imports: module
+    W503,  # Allow line breaks before binary operators
+    W605,  # Invalid escape sequence "\d"
+per-file-ignores =  # Error codes to ignore (per file level)
+    # module imported but unused
+    __init__.py:F401,
+    */__init__.py:F401,
+    # regex escapes being flagged
+    vatscrape_functions.py:W605,
+    */vatscrape_functions.py:W605
+    # bare except statement
+    data/create_test_data.py:E722

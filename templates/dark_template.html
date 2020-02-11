@@ -145,10 +145,11 @@ var map = new mapboxgl.Map({
     container: 'map',
     style: 'mapbox://styles/clearalex/cjsaawc4300jd1fquiakptda8',
     // zoom: 15,
-    // center: [-71.97722138410576, -13.517379300798098]
-    center: [0, 0],
+    center: __FILLINCENTER__,
     attributionControl: false
 });
+
+map.fitBounds(__FILLINBOUNDS__)
 
 // map on load start
 map.on('load', function() {
