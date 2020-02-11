@@ -14,7 +14,7 @@ TOGGLE_TEMPLATE_PATH = PROJECT_ROOT / "../templates/toggle_template.txt"
 TEMPLATE_PATH = PROJECT_ROOT / "../templates/dark_template.html"
 ACCESS_TOKEN_PATH = PROJECT_ROOT / "../.mapbox_access_token"
 MARKER_NUMBER = 200
-MARGIN = 0.01
+PERC_MARGIN = 0.1
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger(__name__)
@@ -268,10 +268,11 @@ class MapBoxWrapper:
         coords = np.array(self.all_coords).reshape(len(self.all_coords) // 2, 2)
         center = coords.mean(axis=0).tolist()
 
-        sw = (coords.min(axis=0) - MARGIN).tolist()
-        ne = (coords.max(axis=0) + MARGIN).tolist()
+        sw = coords.min(axis=0)
+        ne = coords.max(axis=0)
+        margin = np.sqrt(((PERC_MARGIN*(ne-sw)) ** 2) / 2)
 
-        return center, [sw, ne]
+        return center, [(sw - margin).tolist(), (ne + margin).tolist()]
 
     def _add_center_and_bounds(self, template: str):
         '''Adds center and bounds appropriately to template.'''
