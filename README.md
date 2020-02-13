@@ -11,6 +11,18 @@ complicated if need be.
 Familiarity with mapbox will help understanding the class attributes.
 
 ## Usage
+When in your virtualenv:
+```angular2html
+cd mapboxwrapper
+pip install -e .
+```
+
+Before looking at the following example,
+ look up [geojson type](https://tools.ietf.org/html/rfc7946#section-3.1.2) specifications.
+The filters used below are of a specific syntax which can be
+ found [here](https://docs.mapbox.com/mapbox-gl-js/style-spec/expressions/)
+and in it's current implementation any property used in a filter must be universal i.e. every feature must have that
+property defined.
 
 ```python2html
 import mapboxwrapper as mbc

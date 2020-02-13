@@ -84,7 +84,7 @@ class MapBoxWrapper:
         self.template = self._add_center_and_bounds(self.template)
 
         if filters:
-            logger.warning(('Warning: Properties in filters must be universal '
+            logger.warning((' Properties in filters must be universal '
                             'i.e. the property must be defined in every feature.'))
 
             if not isinstance(filters[0], list):  # solves broadcasting problem with 1D array
