@@ -36,9 +36,18 @@ class MapBoxWrapper:
                                         }
                               },
                     'LineString': {'vector_type': 'line',
-                                   'paint': {'line-color': ['get', 'colour'], 'line-width': 1, 'line-opacity': 0.5},
+                                   'paint': {'line-color': ['get', 'colour'],
+                                             'line-width': ['case',
+                                                          ['has', 'line-width'],
+                                                          ['get', 'line-width'],
+                                                          1],
+                                             'line-opacity': ['case',
+                                                          ['has', 'line-opacity'],
+                                                          ['get', 'line-opacity'],
+                                                          0.5]}
                                    }
                     }
+
     LAYER_FILTERS = {'Point': ['==', '$type', 'Point'],
                      'LineString': ['==', '$type', 'LineString']}
     FILTER_DICT = {'Point': 'Point',
